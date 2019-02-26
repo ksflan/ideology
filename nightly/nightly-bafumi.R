@@ -93,9 +93,9 @@ init_function <- function(chain_id = 1,
 n_chains <- 2
 init_list <- lapply(1:n_chains, function(id) init_function(id, member_length = data$L, party_codes = data$X_alpha[,2]))
 
-bafumi <- stan(file = "stan/bafumi.stan",
+bafumi <- stan(file = "../stan/bafumi.stan",
                data = data,
-               iter = 1000,
+               iter = 2000,
                init = init_list,
                chains = n_chains)
 
