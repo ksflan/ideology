@@ -1,0 +1,7 @@
+---
+title: "Bafumi Ideal Point"
+author: "Kevin Flannagan"
+date: "2/26/2019"
+output: html_document
+---
+
