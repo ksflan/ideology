@@ -5,6 +5,9 @@
 source("utils.R")
 
 
+setwd("~/Documents/R Projects/ideology/nightly") # macbook
+# setwd("/Users/kevin/Documents/R Projects/ideology/nightly") # imac
+
 current_congress <- (lubridate::year(today() - 3) - 1789) / 2 + 1
 
 
@@ -111,14 +114,16 @@ alpha <- summary %>%
   mutate(member_id = levels(factor(pre_data$member_id)),
          party = party_vector,
          congress = current_congress,
-         chamber = "senate")
+         chamber = "senate",
+         last_updated = lubridate::now())
 
 
 beta <- summary %>%
   filter(grepl("beta_adj", params)) %>%
   mutate(vote_id = levels(factor(pre_data$vote_id)),
          parameter = "beta",
-         chamber = "senate") %>%
+         chamber = "senate",
+         last_updated = lubridate::now()) %>%
   separate(vote_id, into = c("congress", "session", "roll_call_number"),
            convert = TRUE)
 
@@ -126,14 +131,15 @@ gamma <- summary %>%
   filter(grepl("gamma_adj", params)) %>%
   mutate(vote_id = levels(factor(pre_data$vote_id)),
          parameter = "gamma",
-         chamber = "senate") %>%
+         chamber = "senate",
+         last_updated = lubridate::now()) %>%
   separate(vote_id, into = c("congress", "session", "roll_call_number"),
            convert = TRUE)
 
 vote_results <- rbind(beta,
                       gamma)
 
-
+# dbGetQuery(con, "drop table ideology.bafumi_members")
 dbGetQuery(con, paste0("delete from ideology.bafumi_members where congress = ", current_congress))
 dbWriteTable(conn = con,
              value = alpha,
@@ -141,6 +147,7 @@ dbWriteTable(conn = con,
              row.names = FALSE,
              append = TRUE)
 
+# dbGetQuery(con, "drop table ideology.bafumi_votes")
 dbGetQuery(con, paste0("delete from ideology.bafumi_votes where congress = ", current_congress))
 dbWriteTable(conn = con,
              value = vote_results,

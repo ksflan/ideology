@@ -25,6 +25,8 @@ setwd("/Users/kevin/Documents/R Projects/ideology/nightly")
 
 # RUN BAFUMI MODELS ----
 
+  print("RUNNING BAFUMI")
+  print(lubridate::now())
   system(paste0("/usr/local/bin/Rscript ", nightly_path, "nightly-bafumi.R\""))
 
 # FINISH WRITING LOG ----
